@@ -19,3 +19,12 @@ def get_single_customer(id):
         if customer["id"] == id:
             requested_customer = customer
     return requested_customer
+
+
+def create_customer(customer):
+    max_id = CUSTOMERS[-1]["id"]
+    correct_id = max_id + 1
+    customer["id"] = correct_id
+    CUSTOMERS.append(customer)
+
+    return customer
