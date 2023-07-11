@@ -1,9 +1,9 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, create_animal
-from views import get_all_locations, get_single_location, create_location
-from views import get_all_employees, get_single_employee
-from views import get_all_customers, get_single_customer, create_customer
+from views import get_all_animals, get_single_animal, create_animal, delete_animal
+from views import get_all_locations, get_single_location, create_location, delete_location
+from views import get_all_employees, get_single_employee, create_employee, delete_employee
+from views import get_all_customers, get_single_customer, create_customer, delete_customer
 
 
 
@@ -117,6 +117,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         new_animal = None
         new_location = None
         new_customer = None
+        new_employee = None
 
         # Add a new animal to the list. Don't worry about
         # the orange squiggle, you'll define the create_animal
@@ -133,6 +134,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == "customers":
             new_customer = create_customer(post_body)
             self.wfile.write(json.dumps(new_customer).encode())
+
+        elif resource == "employees":
+            new_employee = create_employee(post_body)
+            self.wfile.write(json.dumps(new_employee).encode())
+
 
 
 
@@ -167,6 +173,36 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers',
                          'X-Requested-With, Content-Type, Accept')
         self.end_headers()
+
+
+    def do_DELETE(self):
+    # Set a 204 response code
+        self._set_headers(204)
+
+    # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+    # Delete a single animal from the list
+        if resource == "animals":
+            delete_animal(id)
+            self.wfile.write("".encode())
+
+
+    # Encode the new animal and send in response
+        elif resource == "locations":
+            delete_location(id)
+            self.wfile.write("".encode())
+        
+        elif resource == "employees":
+            delete_employee(id)
+            self.wfile.write("".encode())
+        
+        elif resource == "customers":
+            delete_customer(id)
+            self.wfile.write("".encode())
+
+
+
 
 
 # This function is not inside the class. It is the starting
